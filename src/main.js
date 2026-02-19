@@ -1,34 +1,47 @@
-const API_URL = "https://psicotrading-backend-production.up.railway.app/chat";
+const URL_API = "https://psicotrading-backend-production.up.railway.app";
 
-const messages = document.getElementById("messages");
-const input = document.getElementById("input");
+const mensajes = document.getElementById("mensajes");
+const aporte = document.getElementById("aporte");
 
-function addMessage(text, type) {
+function añadirMensaje(texto, tipo) {
   const div = document.createElement("div");
-  div.className = `msg ${type}`;
-  div.innerText = text;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+  div.className = `mensaje ${tipo}`;
+  div.textContent = texto;
+  mensajes.appendChild(div);
+  mensajes.scrollTop = mensajes.scrollHeight;
 }
 
-async function send() {
-  const text = input.value.trim();
-  if (!text) return;
+async function enviar() {
+  const texto = aporte.value.trim();
+  if (!texto) return;
 
-  addMessage(text, "user");
-  input.value = "";
+  añadirMensaje(texto, "usuario");
+  aporte.value = "";
 
   try {
-    const res = await fetch(API_URL, {
+    const res = await fetch(`${URL_API}/chat`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: texto }),
     });
 
     const data = await res.json();
-    addMessage(data.reply || "No hay respuesta", "bot");
 
-  } catch (e) {
-    addMessage("Error de conexión con el backend", "bot");
+    añadirMensaje(
+      data.reply || "No hay respuesta del servidor",
+      "bot"
+    );
+
+  } catch (error) {
+    añadirMensaje("Error de conexión con el backend", "bot");
   }
 }
+
+// Permitir enviar con Enter
+aporte.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    enviar();
+  }
+});

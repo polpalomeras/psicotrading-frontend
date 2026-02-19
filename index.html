@@ -2,137 +2,71 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Psicotrading IA — Adrian Cole</title>
+  <title>Psicotrading</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #0e2a47, #08131f);
-      color: white;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .container {
+      background: #0f172a;
+      color: #fff;
       display: flex;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
     .chat {
-      width: 40%;
-      background: #0f2438;
+      width: 100%;
+      max-width: 420px;
+      background: #020617;
       border-radius: 12px;
-      padding: 15px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
     }
-
     .messages {
       flex: 1;
       overflow-y: auto;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-
-    .messages p {
-      margin: 6px 0;
+    .msg {
+      margin-bottom: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
     }
-
+    .user {
+      background: #2563eb;
+      align-self: flex-end;
+    }
+    .bot {
+      background: #334155;
+      align-self: flex-start;
+    }
     input {
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
-      margin-bottom: 6px;
+      outline: none;
     }
-
     button {
+      margin-top: 8px;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
-      background: #00b4d8;
-      color: white;
+      background: #22c55e;
+      font-weight: bold;
       cursor: pointer;
-    }
-
-    .avatar {
-      width: 60%;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
     }
   </style>
 </head>
-
 <body>
 
-<h1>Psicotrading IA — Adrian Cole</h1>
-
-<div class="container">
-
-  <!-- CHAT TEXTO -->
   <div class="chat">
-    <div id="messages" class="messages"></div>
-
-    <input id="input" placeholder="Escribe tu mensaje..." />
-    <button onclick="sendMessage()">Enviar</button>
+    <div class="messages" id="messages"></div>
+    <input id="input" placeholder="Escribe lo que sientes..." />
+    <button onclick="send()">Enviar</button>
   </div>
 
-  <!-- AVATAR -->
-  <div class="avatar">
-    <iframe
-      src="https://embed.liveavatar.com/v1/049ca265-0859-11f1-a99e-066a7fa2e369"
-      allow="microphone"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-</div>
-
-<script>
-async function sendMessage() {
-  const input = document.getElementById("input");
-  const messages = document.getElementById("messages");
-  const text = input.value.trim();
-  if (!text) return;
-
-  messages.innerHTML += `<p><strong>Tú:</strong> ${text}</p>`;
-  input.value = "";
-
-  try {
-    const res = await fetch("https://psicotrading-backend-production.up.railway.app/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
-
-    const data = await res.json();
-
-    if (data.reply) {
-      messages.innerHTML += `<p><strong>Adrian:</strong> ${data.reply}</p>`;
-    } else {
-      messages.innerHTML += `<p style="color:red;">Error del backend</p>`;
-    }
-
-  } catch (e) {
-    messages.innerHTML += `<p style="color:red;">Error de conexión</p>`;
-  }
-
-  messages.scrollTop = messages.scrollHeight;
-}
-</script>
-
+  <script src="main.js"></script>
 </body>
 </html>
